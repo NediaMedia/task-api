@@ -41,6 +41,30 @@ paths:
                 $ref: '#/components/schemas/Task'
         '400':
           $ref: '#/components/responses/BadRequest'
+  /tasks/{id}:
+    get:
+      tags:
+        - Tasks
+      summary: Get a task by ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: The ID of the task to retrieve
+          schema:
+            type: integer
+            example: 1
+      responses:
+        '200':
+          description: Task found successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Task'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '404':
+          $ref: '#/components/responses/NotFound'
 components:
   schemas:
     Task:
@@ -66,6 +90,12 @@ components:
           type: array
           items:
             type: string
+    NotFoundError:
+      type: object
+      properties:
+        error:
+          type: string
+          example: Task not found
   responses:
     BadRequest:
       description: Invalid input
@@ -73,3 +103,9 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/ValidationError'
+    NotFound:
+      description: Task not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/NotFoundError'
